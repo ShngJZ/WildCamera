@@ -31,8 +31,17 @@ Code and data for **Tame a Wild Camera: In-the-Wild Monocular Camera Calibration
 
   https://github.com/ShngJZ/WildCamera/assets/128062217/63449a79-7696-4df1-8428-409981c3729d
 
-
-
+# Introduction
+In (a), our work focuses on monocular camera calibration for in-the-wild images.
+We recover the intrinsic from monocular 3D-prior.
+In (c) - (e), an estimated depthmap is converted to surface normal using a groundtruth and noisy intrinsic individually.
+Noisy intrinsic distorts the point cloud, consequently leading to inaccurate surface normal.
+Motivated by the observation, we develop a solver that utilizes the consistency between the two to recover the intrinsic.
+However, the solution exhibits numerical instability.
+We then propose to learn the incidence field as an alternative 3D monocular prior.
+The incidence field is the collection of the pixel-wise incidence ray, which originates from a $\textcolor[RGB]{237, 28, 36}{\text{3D point}}$, targets at a $\textcolor[RGB]{57, 181, 74}{\text{2D pixel}}$, and crosses the camera origin, as shown in (b).
+Similar to depthmap and normal, a noisy intrinsic leads to a noisy incidence field, as in (e).
+By same motivation, we develop neural network to learn in-the-wild incidence field and develop a RANSAC algorithm to recover intrinsic from the estimated incidence field.
 
 
 
