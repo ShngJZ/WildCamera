@@ -29,7 +29,14 @@ Code and data for **Tame a Wild Camera: In-the-Wild Monocular Camera Calibration
 - In-the-Wild Monocular 3D Object Detection
   <details>
 
-  https://github.com/ShngJZ/WildCamera/assets/128062217/117678b3-587f-4f32-8abb-c67d7921329a
+  https://github.com/ShngJZ/WildCamera/assets/128062217/63449a79-7696-4df1-8428-409981c3729d
+
+
+
+
+
+
+
 
 
 
