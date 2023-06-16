@@ -2,7 +2,7 @@
 Code and data for **Tame a Wild Camera: In-the-Wild Monocular Camera Calibration, Zhu et al, Arxiv 2023**
 
 # Applications and Qualitative Results
-- 4 DoF Camera Calibration
+- 4 DoF Camera Calibration (Zero-Shot)
   <details>
 
   -  Camera Calibration:
@@ -21,15 +21,15 @@ Code and data for **Tame a Wild Camera: In-the-Wild Monocular Camera Calibration
     
     https://github.com/ShngJZ/WildCamera/assets/128062217/320ab8e7-5808-47d0-ab35-16297e6fb695
 
-- Image Crop and Resize Detection and Restoration
-  <details>
-
-  https://github.com/ShngJZ/WildCamera/assets/128062217/2abe54ea-497d-4c12-aa17-0e8ca29b85aa
-  
-- In-the-Wild Monocular 3D Object Detection
+- Image Crop and Resize Detection and Restoration (Zero-Shot)
   <details>
 
   https://github.com/ShngJZ/WildCamera/assets/128062217/c94dcf6d-5378-4a14-9f1c-ee7a966e2d2f
+  
+- In-the-Wild Monocular 3D Object Detection ([Omni3d](https://github.com/facebookresearch/omni3d))
+  <details>
+
+  https://github.com/ShngJZ/WildCamera/assets/128062217/e27961de-0895-4cfe-82ec-387019d2eff0
 
 # Introduction
 <img src="asset/framework.png" width="1000" >
@@ -43,6 +43,14 @@ We then propose to learn the incidence field as an alternative 3D monocular prio
 The incidence field is the collection of the pixel-wise incidence ray, which originates from a $\textcolor[RGB]{237, 28, 36}{\text{3D point}}$, targets at a $\textcolor[RGB]{57, 181, 74}{\text{2D pixel}}$, and crosses the camera origin, as shown in (b).
 Similar to depthmap and normal, a noisy intrinsic leads to a noisy incidence field, as in (e).
 By same motivation, we develop neural network to learn in-the-wild incidence field and develop a RANSAC algorithm to recover intrinsic from the estimated incidence field.
+
+
+
+
+
+
+
+
 
 
 
