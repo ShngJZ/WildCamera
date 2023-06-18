@@ -39,14 +39,21 @@ The incidence field is the collection of the pixel-wise incidence ray, which ori
 We develop a neural network to learn in-the-wild incidence field and a RANSAC algorithm to recover intrinsic from the estimated incidence field.
 
 # Experiments
-- In-the-Wild Monocular Camera Calibration
-  | Dataset  | Zero-Shot   | Synthetic | Perspective | Ours |
-  | --- | --- | --- | --- | --- |
-  | NuScenes |   ❌ | :check_mark | :check_mark | :check_mark |
+- **In-the-Wild Monocular Camera Calibration**
 
+  We benchmark in-the-wild monocular camera calibration performance. 
+  Entry ''Synthetic'' randomly generates novel intrinsics with image resizing and cropping.
+  Entry ''Ours + Assumption'' assumes 1DoF intrinsic, i.e., assuming central focal point and identical focal length.
+  Baseline ''[Perspective](https://github.com/jinlinyi/PerspectiveFields)'' is a recent CVPR'23 work.
+  <img src="asset/comparisons-in-the-wild-calibration.png" height="180" >
 
+- **Comparisons to Monocular Camera Calibration with Geometry**
 
+  <img src="asset/comparisons-calibration-with-geometry.png" height="50" >
 
+- **Comparisons to Calibration with Object**
+
+  <img src="asset/comparisons-calibration-with-object.png" height="90" >
 
 
 
