@@ -45,17 +45,19 @@ We develop a neural network to learn in-the-wild incidence field and a RANSAC al
   Entry ''Synthetic'' randomly generates novel intrinsics with image resizing and cropping.
   Entry ''Ours + Assumption'' assumes 1DoF intrinsic, i.e., assuming central focal point and identical focal length.
   Baseline ''[Perspective](https://github.com/jinlinyi/PerspectiveFields)'' is a recent CVPR'23 work.
-  <img src="asset/comparisons-in-the-wild-calibration.png" height="180" >
+  <img src="asset/comparisons-in-the-wild-calibration.png" height="200" >
 
-- **Comparisons to Monocular Camera Calibration with Geometry**
+- **Comparisons to Monocular Camera Calibration with Geometry**\
+  <img src="asset/comparisons-calibration-with-geometry.png" height="60" >
 
-  <img src="asset/comparisons-calibration-with-geometry.png" height="50" >
+- **Comparisons to Calibration with Object**\
+  <img src="asset/comparisons-calibration-with-object.png" height="110" >
 
-- **Comparisons to Calibration with Object**
+# Live Demo
+We are wroking on a Hugging Face interface for an online demo.
 
-  <img src="asset/comparisons-calibration-with-object.png" height="90" >
-
-
+# Code, Data, and Model
+We will release upon publication.
 
 
 
