@@ -1,7 +1,7 @@
-# WildCamera
-Code and data for **[Tame a Wild Camera: In-the-Wild Monocular Camera Calibration, Zhu et al, Arxiv 2023](https://arxiv.org/abs/2306.10988)** 
+## WildCamera
+Code and data for **[Tame a Wild Camera: In-the-Wild Monocular Camera Calibration, Zhu et al, NeurIPS 2023](https://arxiv.org/abs/2306.10988)** 
 
-# Applications and Qualitative Results
+## Applications and Qualitative Results
 - 4 DoF Camera Calibration (Zero-Shot)
   <details>
 
@@ -32,14 +32,14 @@ Code and data for **[Tame a Wild Camera: In-the-Wild Monocular Camera Calibratio
 
   https://github.com/ShngJZ/WildCamera/assets/128062217/d776e3d0-11c3-48c2-9a1b-e5adc10408ba
 
-# Introduction
+## Introduction
 <img src="asset/framework.png" width="1000" >
 Our work focuses on monocular camera calibration for in-the-wild images.
 We propose to learn the incidence field as a monocular 3D prior.
 The incidence field is the collection of the pixel-wise incidence ray, which originates from a 3D point, targets at a 2D pixel, and crosses the camera origin, as shown in (b).
 We develop a neural network to learn in-the-wild incidence field and a RANSAC algorithm to recover intrinsic from the estimated incidence field.
 
-# Experiments
+## Experiments
 - **In-the-Wild Monocular Camera Calibration**
 
   We benchmark in-the-wild monocular camera calibration performance. 
@@ -54,14 +54,36 @@ We develop a neural network to learn in-the-wild incidence field and a RANSAC al
 - **Comparisons to Calibration with Object**\
   <img src="asset/comparisons-calibration-with-object.png" height="110" >
 
-# Live Demo
-We are wroking on a Hugging Face interface for an online demo.
+## Data Structure
+```
+WildCamera
+├── model_zoo
+│   ├── Release
+│   │   ├── wild_camera_all.pth
+```
 
-# Code, Data, and Model
-We will release upon publication.
+## Model
+Please download our in-the-wild monocular camera calibration model [here](https://huggingface.co/datasets/Shengjie/WildCamera/resolve/main/checkpoint/wild_camera_all.pth).
 
+## Installation
+```bash
+conda create -n wildacamera python=3.8
+conda activate wildacamera
+conda install pytorch=1.10.0 torchvision cudatoolkit=11.1
+pip install matplotlib, tqdm, timm, mmcv
+```
 
+## Demo
+``` bash
+# Download example COCO images
+sh asset/download_demo_images.sh
 
+# Estimate Intrinsic over images collected from github
+python demo/demo_inference.py
+
+# Demo Inference on dolly zoom videos
+python demo/demo_dollyzoom.py
+```
 
 
 
