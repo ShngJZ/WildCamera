@@ -185,19 +185,19 @@ class MonocularCalibrator(torch.nn.Module):
         intrinsic_opt = MonocularCalibrator.unnorm_intrinsic(intrinsic_opt.unsqueeze(0), b, h, w, device)
         return intrinsic_opt.squeeze(0)
 
-    def calibrate_camera_1DoF(self, incidence, scaleM, RANSAC_trial=2048):
+    def calibrate_camera_1DoF(self, incidence, r, RANSAC_trial=2048):
         """ 1DoF RANSAC Camera Calibration
 
         Args:
             incidence (tensor): Incidence Field.
-            scaleM (tensor): Image Transformation from Original Resolution to Network Inference Resolution (480 x 640)
+            r: Aspect Ratio Restoration from Network Inference Resolution (480 x 640) to the Original Resolution
             RANSAC_trial (int): RANSAC Iteration Number. Default: 2048.
         """
 
         # Calibrate assume a simple pinhole camera model
         b, _, h, w = incidence.shape
         assert b == 1
-        r = (scaleM[0, 1, 1] / scaleM[0, 0, 0]).item()
+        # r = (scaleM[0, 1, 1] / scaleM[0, 0, 0]).item()
         device = incidence.device
         coords2D = self.initcoords2D(b, h, w, device, homogeneous=True)
 

@@ -165,7 +165,8 @@ class NEWCRFIF(nn.Module):
         if not wtassumption:
             Kest = monocalibrator.calibrate_camera_4DoF(incidence)
         else:
-            Kest = monocalibrator.calibrate_camera_1DoF(incidence, scaleM.unsqueeze(0))
+            r = (scaleM[1, 1] / scaleM[0, 0]).item()
+            Kest = monocalibrator.calibrate_camera_1DoF(incidence, r=r)
 
         Kest = torch.inverse(scaleM) @ Kest
         return Kest.detach().squeeze().cpu().numpy(), incidence

@@ -100,10 +100,7 @@ class BaseDecodeHead(nn.Module):
                  act_cfg=dict(type='ReLU'),
                  in_index=-1,
                  input_transform=None,
-                 loss_decode=dict(
-                     type='CrossEntropyLoss',
-                     use_sigmoid=False,
-                     loss_weight=1.0),
+                 loss_decode=None,
                  ignore_index=255,
                  sampler=None,
                  align_corners=False):
@@ -116,16 +113,8 @@ class BaseDecodeHead(nn.Module):
         self.norm_cfg = norm_cfg
         self.act_cfg = act_cfg
         self.in_index = in_index
-        # self.loss_decode = build_loss(loss_decode)
         self.ignore_index = ignore_index
         self.align_corners = align_corners
-        # if sampler is not None:
-        #     self.sampler = build_pixel_sampler(sampler, context=self)
-        # else:
-        #     self.sampler = None
-
-        # self.conv_seg = nn.Conv2d(channels, num_classes, kernel_size=1)
-        # self.conv1 = nn.Conv2d(channels, num_classes, 3, padding=1)
         if dropout_ratio > 0:
             self.dropout = nn.Dropout2d(dropout_ratio)
         else:

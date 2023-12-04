@@ -1,8 +1,11 @@
-# Put most Common Functions Here
+import math
 import torch
+import torch.nn as nn
+import torch.distributed as dist
 import torch.nn.functional as F
 import numpy as np
 from einops import rearrange
+from torch.utils.data import Sampler
 
 # -- # Common Functions
 class InputPadder:
@@ -137,3 +140,89 @@ def apply_augmentation(rgb, K, seed=None, augscale=2.0, no_change_prob=0.0):
     device = rgb.device
     rgb_trans = resample_rgb(rgb.unsqueeze(0), T, b, h, w, device).squeeze(0)
     return rgb_trans, K_trans, T
+
+
+
+class IncidenceLoss(nn.Module):
+    def __init__(self, loss='cosine'):
+        super(IncidenceLoss, self).__init__()
+        self.loss = loss
+        self.smoothl1 = torch.nn.SmoothL1Loss(beta=0.2)
+
+    def forward(self, incidence, K):
+        b, _, h, w = incidence.shape
+        device = incidence.device
+
+        incidence_gt = intrinsic2incidence(K, b, h, w, device)
+        incidence_gt = incidence_gt.squeeze(4)
+        incidence_gt = rearrange(incidence_gt, 'b h w d -> b d h w')
+
+        if self.loss == 'cosine':
+            loss = 1 - torch.cosine_similarity(incidence, incidence_gt, dim=1)
+        elif self.loss == 'absolute':
+            loss = self.smoothl1(incidence, incidence_gt)
+
+        loss = loss.mean()
+        return loss
+
+
+class DistributedSamplerNoEvenlyDivisible(Sampler):
+    """Sampler that restricts data loading to a subset of the dataset.
+
+    It is especially useful in conjunction with
+    :class:`torch.nn.parallel.DistributedDataParallel`. In such case, each
+    process can pass a DistributedSampler instance as a DataLoader sampler,
+    and load a subset of the original dataset that is exclusive to it.
+
+    .. note::
+        Dataset is assumed to be of constant size.
+
+    Arguments:
+        dataset: Dataset used for sampling.
+        num_replicas (optional): Number of processes participating in
+            distributed training.
+        rank (optional): Rank of the current process within num_replicas.
+        shuffle (optional): If true (default), sampler will shuffle the indices
+    """
+
+    def __init__(self, dataset, num_replicas=None, rank=None, shuffle=True):
+        if num_replicas is None:
+            if not dist.is_available():
+                raise RuntimeError("Requires distributed package to be available")
+            num_replicas = dist.get_world_size()
+        if rank is None:
+            if not dist.is_available():
+                raise RuntimeError("Requires distributed package to be available")
+            rank = dist.get_rank()
+        self.dataset = dataset
+        self.num_replicas = num_replicas
+        self.rank = rank
+        self.epoch = 0
+        num_samples = int(math.floor(len(self.dataset) * 1.0 / self.num_replicas))
+        rest = len(self.dataset) - num_samples * self.num_replicas
+        if self.rank < rest:
+            num_samples += 1
+        self.num_samples = num_samples
+        self.total_size = len(dataset)
+        self.shuffle = shuffle
+
+    def __iter__(self):
+        # deterministically shuffle based on epoch
+        g = torch.Generator()
+        g.manual_seed(self.epoch)
+        if self.shuffle:
+            indices = torch.randperm(len(self.dataset), generator=g).tolist()
+        else:
+            indices = list(range(len(self.dataset)))
+
+        # subsample
+        indices = indices[self.rank:self.total_size:self.num_replicas]
+        self.num_samples = len(indices)
+
+        return iter(indices)
+
+    def __len__(self):
+        return self.num_samples
+
+    def set_epoch(self, epoch):
+        self.epoch = epoch
