@@ -91,7 +91,6 @@ if __name__ == '__main__':
         ]
         main_worker(args, wtassumption=False)
         main_worker(args, wtassumption=True)
-
     elif args.experiment_name == 'gsv':
         args.load_ckpt = os.path.join(ckpts_dir, 'gsv.pth')
         args.datasets_train = [

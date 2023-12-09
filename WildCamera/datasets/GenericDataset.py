@@ -101,20 +101,11 @@ class GenericDataset:
         # Step 2 : Apply random spatial augmentation
 
         scene_name, stem_name = self.data_names[idx].split(' ')
-
         h5pypath = os.path.join(self.data_root, '{}.hdf5'.format(scene_name))
-        if not os.path.exists(h5pypath):
-            h5pypath = os.path.join(self.data_root, scene_name)
 
         if not os.path.exists(h5pypath):
             print("H5 file %s missing" % h5pypath)
-
-        assert os.path.exists(h5pypath)
-
-        comps = h5pypath.split('/')
-        os.makedirs(os.path.join('/media/shengjie/scratch1/data/MonoCalib', comps[-2]), exist_ok=True)
-        h5pypath_release = os.path.join('/media/shengjie/scratch1/data/MonoCalib', comps[-2], comps[-1])
-        h5pypath = h5pypath_release
+            assert os.path.exists(h5pypath)
 
         with h5py.File(h5pypath, 'r') as hf:
             # Load Intrinsic

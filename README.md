@@ -1,5 +1,9 @@
 ## WildCamera
-Codes and data for **[Tame a Wild Camera: In-the-Wild Monocular Camera Calibration, Zhu et al, NeurIPS 2023](https://arxiv.org/abs/2306.10988)** 
+This repository contains the code for the paper: **[Tame a Wild Camera: In-the-Wild Monocular Camera Calibration](https://arxiv.org/abs/2306.10988)** in NeurIPS 2023.
+<br>
+Authors: [Shengjie Zhu](https://shngjz.github.io/), [Abhinav Kumar](https://sites.google.com/view/abhinavkumar), [Masa Hu](https://scholar.google.com/citations?user=Xs-NkFMAAAAJ&hl=en), and [Xiaoming Liu](https://www.cse.msu.edu/~liuxm/index2.html)
+<br>
+[[arXiv preprint]](https://arxiv.org/abs/2306.10988)  [[Prject Page]](https://shngjz.github.io/WildCamera.github.io/) [[Poster]](https://drive.google.com/file/d/1y8v0jBd6MFtP8urHNBCzh0wsK43djIj0/view?usp=sharing)
 
 ## Applications and Qualitative Results
 - 4 DoF Camera Calibration (Zero-Shot)
@@ -32,14 +36,14 @@ Codes and data for **[Tame a Wild Camera: In-the-Wild Monocular Camera Calibrati
 
   https://github.com/ShngJZ/WildCamera/assets/128062217/d776e3d0-11c3-48c2-9a1b-e5adc10408ba
 
-## Introduction
+## Brief Introduction
 <img src="asset/framework.png" width="1000" >
 We calibrate 4 DoF intrinsic parameters for in-the-wild images.
 The work systematically presents the connection between intrinsic and monocular 3D priors, e.g. intrinsic is inferrable from monocular depth and surface normals.
 We additionally introduce an alternative monocular 3D prior, the incidence field, for calibration.
 
-## Data Structure
-Please download pretrained models [here](https://huggingface.co/datasets/Shengjie/WildCamera/tree/main).
+## Data Preparation
+Pretrained models are held in [Hugging Face](https://huggingface.co/datasets/Shengjie/WildCamera/tree/main).
 ```
 WildCamera
 ├── model_zoo
@@ -47,7 +51,7 @@ WildCamera
 │   │   ├── wild_camera_all.pth
 │   │   ├── wild_camera_gsv.pth
 ```
-Use this script to download data in your preferred location. 
+Use the script to download data in preferred location. 
 Entire dataset is around 150 GB.
 ```bash
 ./asset/download_wildcamera_dataset.sh
@@ -84,7 +88,7 @@ python WildCamera/benchmark/benchmark_calibration.py --experiment_name gsv
 ```
 
 
-## Citing <a name="citing"></a>
+## Citation <a name="citing"></a>
 
 Please use the following BibTeX to cite our work.
 
