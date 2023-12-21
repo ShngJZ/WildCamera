@@ -19,7 +19,8 @@ def IncdDataset(
         augscale=2.0,
         no_change_prob=0.1,
         coloraugmentation=False,
-        coloraugmentation_scale=0.0
+        coloraugmentation_scale=0.0,
+        transformcategory='transform_crop' # For Evaluaiton Purpose
 ) -> None:
     datasets = dict()
 
@@ -85,7 +86,8 @@ def IncdDataset(
                 augscale=augscale,
                 no_change_prob=no_change_prob,
                 coloraugmentation=coloraugmentation,
-                coloraugmentation_scale=coloraugmentation_scale
+                coloraugmentation_scale=coloraugmentation_scale,
+                transformcategory=transformcategory
             )
 
     if split == 'train':

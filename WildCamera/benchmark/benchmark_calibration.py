@@ -1,5 +1,5 @@
 from __future__ import print_function, division
-import os, sys, inspect, copy
+import os, sys, inspect
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))))
 sys.path.insert(0, project_root)
 
@@ -14,21 +14,16 @@ from WildCamera.newcrfs.newcrf_incidencefield import NEWCRFIF
 
 
 parser = argparse.ArgumentParser(description='NeWCRFs PyTorch implementation.', fromfile_prefix_chars='@')
-
 parser.add_argument('--load_ckpt',                 type=str,   help='path of ckpt')
-parser.add_argument('--data_path',                 type=str,   help='path to the data', required=True)
+parser.add_argument('--data_path',                 type=str,   help='path to the data', default='data/MonoCalib')
 parser.add_argument('--experiment_name',           type=str,   help='name of the experiment', required=True, choices=['in_the_wild', 'gsv'])
 
 def main_worker(args, wtassumption=False):
     args.gpu = 0
+    pprint(vars(args))
 
     model = NEWCRFIF(version='large07', pretrained=None)
-    if args.experiment_name == 'in_the_wild':
-        ckpt_path = os.path.join(project_root, 'model_zoo/Release', 'wild_camera_all.pth')
-    elif args.experiment_name == 'gsv':
-        ckpt_path = os.path.join(project_root, 'model_zoo/Release', 'wild_camera_gsv.pth')
-
-    model.load_state_dict(torch.load(ckpt_path, map_location="cpu"), strict=True)
+    model.load_state_dict(torch.load(args.load_ckpt, map_location="cpu"), strict=True)
     model.eval()
     model.cuda()
     logger.info("Load Model from %s" % args.load_ckpt)
@@ -53,13 +48,9 @@ if __name__ == '__main__':
 
     args.eval_workers = 4
     args.l1_th = 0.02
-    pprint(vars(args))
-
-    script_dir = os.path.dirname(os.path.realpath(__file__))
-    ckpts_dir = os.path.join(os.path.dirname(os.path.dirname(script_dir)), 'model_zoo/Release')
 
     if args.experiment_name == 'in_the_wild':
-        args.load_ckpt = os.path.join(ckpts_dir, 'wild_camera_all.pth')
+        args.load_ckpt = os.path.join(project_root, 'model_zoo/Release', 'wild_camera_all.pth')
         args.datasets_train = [
             'Nuscenes',
             'KITTI',
@@ -92,7 +83,7 @@ if __name__ == '__main__':
         main_worker(args, wtassumption=False)
         main_worker(args, wtassumption=True)
     elif args.experiment_name == 'gsv':
-        args.load_ckpt = os.path.join(ckpts_dir, 'gsv.pth')
+        args.load_ckpt = os.path.join(project_root, 'model_zoo/Release', 'wild_camera_gsv.pth')
         args.datasets_train = [
             'GSV'
         ]

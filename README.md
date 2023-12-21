@@ -43,16 +43,26 @@ The work systematically presents the connection between intrinsic and monocular 
 We additionally introduce an alternative monocular 3D prior, the incidence field, for calibration.
 
 ## Data Preparation
-Pretrained models are held in [Hugging Face](https://huggingface.co/datasets/Shengjie/WildCamera/tree/main).
+Pretrained models and data are held in [Hugging Face](https://huggingface.co/datasets/Shengjie/WildCamera/tree/main).
 ```
 WildCamera
 ├── model_zoo
 │   ├── Release
 │   │   ├── wild_camera_all.pth
 │   │   ├── wild_camera_gsv.pth
+├── data
+│   ├── MonoCalib
+│   │   ├── ARKitScenes
+│   │   ├── BIWIRGBDID
+│   │   ├── CAD120
+│   │   ├── ...
+│   │   ├── Waymo
+│   ├── UncalibTwoViewPoseEvaluation
+│   │   ├── megadepth_test_1500
+│   │   ├── scannet_test_1500
 ```
-Use the script to download data in preferred location. 
-Entire dataset is around 150 GB.
+Use the script to download data in your preferred location. 
+Entire dataset takes around 150 GB disk space.
 ```bash
 ./asset/download_wildcamera_dataset.sh
 ```
@@ -85,6 +95,12 @@ python WildCamera/benchmark/benchmark_calibration.py --experiment_name in_the_wi
 # Benchmark Tab.3
 python WildCamera/benchmark/benchmark_calibration.py --experiment_name gsv
 
+# Benchmark Tab.5
+python WildCamera/benchmark/benchmark_crop.py
+
+# Benchmark Tab.6
+python WildCamera/benchmark/benchmark_uncalibtwoview_megadepth.py
+python WildCamera/benchmark/benchmark_uncalibtwoview_scannet.py
 ```
 
 

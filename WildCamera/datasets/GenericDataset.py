@@ -29,6 +29,7 @@ class GenericDataset:
                  no_change_prob=0.1,
                  coloraugmentation=False,
                  coloraugmentation_scale=0.1,
+                 transformcategory='transform_calibration'
                  ) -> None:
 
         name_mapping = {
@@ -75,6 +76,7 @@ class GenericDataset:
         self.coloraugmentation_scale = coloraugmentation_scale
 
         self.datasetname = datasetname
+        self.transformcategory = transformcategory
 
     def __len__(self):
         return len(self.data_names)
@@ -143,12 +145,12 @@ class GenericDataset:
                     rgb, K, seed=None, augscale=self.augscale, no_change_prob=self.no_change_prob
                 )
             else:
-                T = np.array(h5py.File(h5pypath, 'r')['transform'][stem_name])
+                T = np.array(h5py.File(h5pypath, 'r')[self.transformcategory][stem_name])
                 T = torch.from_numpy(T).float()
                 K = torch.inverse(T) @ K
 
-                _, h, w = rgb.shape
-                rgb = resample_rgb(rgb.unsqueeze(0), T, 1, h, w, rgb.device).squeeze(0)
+                _, h_, w_ = rgb.shape
+                rgb = resample_rgb(rgb.unsqueeze(0), T, 1, h_, w_, rgb.device).squeeze(0)
         else:
             T = torch.eye(3, dtype=torch.float32)
 
@@ -159,7 +161,11 @@ class GenericDataset:
             'K_raw': K_raw,
             'rgb_raw': rgb_raw,
             'aspect_ratio_restoration': aspect_ratio_restoration,
-            'datasetname': self.datasetname
+            'datasetname': self.datasetname,
+            # Only Required in Crop Evaluation
+            'T': T,
+            'scaleM': scaleM.astype(np.float32),
+            'size_wo_change': (h, w),
         }
 
         return data_dict
