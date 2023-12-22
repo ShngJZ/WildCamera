@@ -7923,6 +7923,6 @@ wget https://huggingface.co/datasets/Shengjie/WildCamera/resolve/main/dataset/Wa
 mv Waymo_train_segment-18441113814326864765_725_000_745_000_with_camera_labels.hdf5?download=true Waymo_train_segment-18441113814326864765_725_000_745_000_with_camera_labels.hdf5
 cd ..
 cd ..
-wget https://huggingface.co/datasets/Shengjie/WildCamera/blob/main/dataset/UncalibTwoViewPoseEvaluation.tar
+wget https://huggingface.co/datasets/Shengjie/WildCamera/resolve/main/dataset/UncalibTwoViewPoseEvaluation.tar?download=true
 tar -xvf UncalibTwoViewPoseEvaluation.tar
 rm UncalibTwoViewPoseEvaluation.tar

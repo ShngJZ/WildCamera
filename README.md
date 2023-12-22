@@ -79,9 +79,11 @@ ln -s your-data-location data
 ```bash
 conda create -n wildacamera python=3.8
 conda activate wildacamera
-conda install pytorch=1.10.0 torchvision cudatoolkit=11.1
-pip install matplotlib, tqdm, timm, mmcv
+conda install pytorch==1.13.0 torchvision==0.14.0 torchaudio==0.13.0 pytorch-cuda=11.6 -c pytorch -c nvidia
+pip install mmcv==2.0.0 -f https://download.openmmlab.com/mmcv/dist/cu116/torch1.13/index.html
+pip install timm tensorboard loguru einops natsort h5py
 ```
+If prefer difference pytorch or cuda version, please follow this [link](https://mmcv.readthedocs.io/en/latest/get_started/installation.html) in customizing the mmcv.
 
 ## Demo
 ``` bash
