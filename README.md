@@ -66,7 +66,8 @@ WildCamera
 Use the script to download data in your preferred location. 
 Entire dataset takes around 150 GB disk space.
 ```bash
-mkdir data
+mkdir model_zoo
+./asset/download_wildcamera_checkpoint.sh
 ln -s your-data-location data
 ./asset/download_wildcamera_dataset.sh
 ```
