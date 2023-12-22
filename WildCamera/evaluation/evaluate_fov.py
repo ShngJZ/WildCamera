@@ -14,10 +14,11 @@ from tools.tools import DistributedSamplerNoEvenlyDivisible
 from WildCamera.datasets.IncdDataset import IncdDataset
 
 class EvaluateFov:
-    def __init__(self):
-        self.min_fovy = 1e10
 
-    def evaluate(self, model, args, steps, writer=None, group=None, wtassumption=False):
+    def __init__(self):
+        self.min_fovy = np.inf
+
+    def evaluate(self, model, args, steps, writer=None, group=None, wtassumption=False, split='test'):
 
         if len(args.datasets_eval) > 1:
             autosave = False
@@ -40,7 +41,7 @@ class EvaluateFov:
                 wt=args.input_width,
                 augmentation=augmentation,
                 shuffleseed=None,
-                split='test',
+                split=split,
                 augscale=args.augscale,
                 no_change_prob=0.0
             )
@@ -53,14 +54,25 @@ class EvaluateFov:
                         writer.add_scalar('Eval_{}/{}'.format(dataaset, k), measurements[k], steps)
 
             if args.gpu == 0 and autosave and (steps > 0):
-                if measurements['error_f'] < self.min_focal:
-                    self.min_focal = measurements['error_f']
-                    svpath = os.path.join(args.saving_location, 'model_zoo', args.experiment_name, 'min_focal.ckpt')
-                    torch.save(model.state_dict(), svpath)
+                if measurements['error_fovy'] < self.min_fovy:
+                    self.min_fovy = measurements['error_fovy']
+                    svpath = os.path.join(args.saving_location, 'model_zoo', args.experiment_name, 'min_fovy.ckpt')
+                    try:
+                        model_ = model.module
+                    except:
+                        model_ = model
+                    torch.save(model_.state_dict(), svpath)
                     logger.info("Save to %s" % svpath)
 
         if args.gpu == 0 and (not autosave) and (steps > 0):
-            torch.save(model.state_dict(), os.path.join(args.saving_location, 'model_zoo', args.experiment_name, 'step_{}.ckpt'.format(str(steps))))
+            try:
+                model_ = model.module
+            except:
+                model_ = model
+            torch.save(
+                model_.state_dict(),
+                os.path.join(args.saving_location, 'model_zoo', args.experiment_name, 'step_{}.ckpt'.format(str(steps)))
+            )
 
         if args.gpu == 0:
             errors_all_mean = [['Datasets', 'error_fovy', 'error_fovy_medi']]

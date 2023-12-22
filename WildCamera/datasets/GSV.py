@@ -63,7 +63,11 @@ class GSV:
             'K_raw': torch.clone(K),
             'rgb_raw': torch.clone(rgb),
             'aspect_ratio_restoration': aspect_ratio_restoration,
-            'fovy': fovy
+            'fovy': fovy,
+            # Only Required in Crop Evaluation and Visualization in Training
+            'T': torch.eye(3, dtype=torch.float32),
+            'scaleM': scaleM.astype(np.float32),
+            'size_wo_change': (h, w),
         }
 
         return data_dict

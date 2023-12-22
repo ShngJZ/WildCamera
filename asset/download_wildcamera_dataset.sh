@@ -1,3 +1,4 @@
+cd data
 mkdir MonoCalib
 cd MonoCalib
 mkdir ARKitScenes

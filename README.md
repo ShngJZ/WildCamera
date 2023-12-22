@@ -50,6 +50,8 @@ WildCamera
 │   ├── Release
 │   │   ├── wild_camera_all.pth
 │   │   ├── wild_camera_gsv.pth
+│   ├── swin_transformer
+│   │   ├── swin_large_patch4_window7_224_22k.pth
 ├── data
 │   ├── MonoCalib
 │   │   ├── ARKitScenes
@@ -64,6 +66,8 @@ WildCamera
 Use the script to download data in your preferred location. 
 Entire dataset takes around 150 GB disk space.
 ```bash
+mkdir data
+ln -s your-data-location data
 ./asset/download_wildcamera_dataset.sh
 ```
 
