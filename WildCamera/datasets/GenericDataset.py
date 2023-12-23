@@ -162,7 +162,7 @@ class GenericDataset:
             'rgb_raw': rgb_raw,
             'aspect_ratio_restoration': aspect_ratio_restoration,
             'datasetname': self.datasetname,
-            # Only Required in Crop Evaluation and Visualization in Training
+            # Only Required in Crop Evaluation
             'T': T,
             'scaleM': scaleM.astype(np.float32),
             'size_wo_change': (h, w),

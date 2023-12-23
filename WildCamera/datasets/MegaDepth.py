@@ -66,7 +66,11 @@ class MegaDepth:
             'K_raw': K_raw,
             'rgb_raw': rgb_raw,
             'aspect_ratio_restoration': aspect_ratio_restoration,
-            'datasetname': self.datasetname
+            'datasetname': self.datasetname,
+            # Only Required in Crop Evaluation
+            'T': torch.eye(3, dtype=torch.float32),
+            'scaleM': scaleM.astype(np.float32),
+            'size_wo_change': (h, w),
         }
 
         return data_dict

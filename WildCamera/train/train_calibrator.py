@@ -35,19 +35,20 @@ parser.add_argument('--evaluation_only',           action="store_true")
 parser.add_argument('--l1_th',                     type=int,  help='RANSAC threshold', default=0.02)
 
 # Dataset
-parser.add_argument('--data_path',                 type=str,   help='path to the data', required=True)
+parser.add_argument('--data_path',                 type=str,   help='path to the data', default='data/MonoCalib')
 parser.add_argument('--input_height',              type=int,   help='input height', default=480)
 parser.add_argument('--input_width',               type=int,   help='input width',  default=640)
 
 # Training
 parser.add_argument('--batch_size',                type=int,   help='batch size', default=16)
 parser.add_argument('--loss',                      type=str,   default='cosine', help='You can also choees l1 loss')
-parser.add_argument('--steps_per_epoch',           type=int,   help='dataloader workers', default=1000)
+parser.add_argument('--steps_per_epoch',           type=int,   help='frequency for evaluation', default=1000)
+parser.add_argument('--termination_epoch',         type=int,   help='epoch to stop training', default=25)
 
 # Training Misc
 parser.add_argument('--weight_decay',              type=float, help='weight decay factor for optimization', default=1e-2)
 parser.add_argument('--adam_eps',                  type=float, help='epsilon in Adam optimizer', default=1e-6)
-parser.add_argument('--train_workers',             type=int,   help='dataloader workers', default=0)
+parser.add_argument('--train_workers',             type=int,   help='dataloader workers', default=32)
 parser.add_argument('--eval_workers',              type=int,   help='dataloader workers', default=2)
 parser.add_argument('--learning_rate',             type=float, help='initial learning rate', default=1e-5)
 parser.add_argument('--end_learning_rate',         type=float, help='end learning rate', default=-1)
@@ -126,6 +127,9 @@ def main_worker(gpu, ngpus_per_node, args):
     if args.experiment_set == 'gsv':
         from WildCamera.evaluation.evaluate_fov import EvaluateFov
         evaluator = EvaluateFov()
+    elif args.experiment_set == 'in_the_wild':
+        from WildCamera.evaluation.evaluate_intrinsic import EvaluateIntrinsic
+        evaluator = EvaluateIntrinsic()
     else:
         raise NotImplementedError()
 
@@ -149,6 +153,10 @@ def main_worker(gpu, ngpus_per_node, args):
         return
 
     for n_0 in range(epoch):
+
+        if n_0 > args.termination_epoch:
+            break
+
         incdataset = IncdDataset(
             data_root=args.data_path,
             datasets_included=args.datasets_train,
@@ -196,13 +204,9 @@ def main_worker(gpu, ngpus_per_node, args):
             if np.mod(global_step, 1000) == 0 and args.gpu == 0:
                 b = 1
                 _, _, h, w = rgb.shape
-                device = rgb.device
-                incidence_src = rearrange(intrinsic2incidence(sample_batched['K_raw'][0:1], b, h, w, device).squeeze(4), 'b h w d -> b d h w')
-                incidence_ref = resample_rgb(incidence_src, sample_batched['T'][0], b, h, w, device)
 
                 rgb = inv_normalize(rgb)
                 vls1 = tensor2rgb(rgb, viewind=0)
-                vls2 = tensor2rgb((incidence_ref + 1) / 2, viewind=0)
 
                 device = rgb.device
                 incidence_gt = intrinsic2incidence(K[0:1], b, h, w, device)
@@ -210,17 +214,8 @@ def main_worker(gpu, ngpus_per_node, args):
                 vls3 = tensor2rgb((incidence + 1) / 2, viewind=0)
                 vls4 = tensor2rgb((incidence_gt + 1) / 2, viewind=0)
 
-                vlss1 = np.concatenate([np.array(vls1), np.array(vls3)], axis=1)
-                vlss2 = np.concatenate([np.array(vls2), np.array(vls4)], axis=1)
-
-                vls = np.concatenate([
-                    np.array(vlss1), np.array(vlss2)
-                ], axis=0)
-
-                maxdiff = (incidence_ref - incidence_gt).abs().max()
-
+                vls = np.concatenate([np.array(vls1), np.array(vls3), np.array(vls4)], axis=0)
                 writer.add_image('visualization', (torch.from_numpy(vls).float() / 255).permute([2, 0, 1]), global_step)
-                writer.add_scalar('gt_monitor', maxdiff.item(), global_step)
 
             if writer is not None and args.gpu == 0:
                 writer.add_scalar('loss/loss_incidence', loss.item(), global_step)
@@ -256,8 +251,42 @@ def main():
         args.saving_location = project_root
 
     if args.experiment_set == 'gsv':
-        args.datasets_train = ['GSV']
-        args.datasets_eval = ['GSV']
+        args.datasets_train = [
+            'GSV'
+        ]
+        args.datasets_eval = [
+            'GSV'
+        ]
+    elif args.experiment_set == 'in_the_wild':
+        args.datasets_train = [
+            'Nuscenes',
+            'KITTI',
+            'Cityscapes',
+            'NYUv2',
+            'ARKitScenes',
+            'MegaDepth',
+            'SUN3D',
+            'MVImgNet',
+            'Objectron'
+        ]
+        args.datasets_eval = [
+            'Nuscenes',
+            'KITTI',
+            'Cityscapes',
+            'NYUv2',
+            'ARKitScenes',
+            'MegaDepth',
+            'SUN3D',
+            'MVImgNet',
+            'Objectron',
+            'Waymo',
+            'BIWIRGBDID',
+            'RGBD',
+            'ScanNet',
+            'MVS',
+            'Scenes11'
+        ]
+
     else:
         raise NotImplementedError()
 

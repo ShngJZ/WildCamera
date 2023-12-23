@@ -66,9 +66,6 @@ WildCamera
 Use the script to download data in your preferred location. 
 Entire dataset takes around 150 GB disk space.
 ```bash
-chmod 744 ./asset/download_wildcamera_checkpoint.sh
-chmod 744 ./asset/download_wildcamera_dataset.sh
-
 mkdir model_zoo
 ./asset/download_wildcamera_checkpoint.sh
 ln -s your-data-location data
@@ -81,7 +78,7 @@ conda create -n wildacamera python=3.8
 conda activate wildacamera
 conda install pytorch==1.13.0 torchvision==0.14.0 torchaudio==0.13.0 pytorch-cuda=11.6 -c pytorch -c nvidia
 pip install mmcv==2.0.0 -f https://download.openmmlab.com/mmcv/dist/cu116/torch1.13/index.html
-pip install timm tensorboard loguru einops natsort h5py
+pip install timm tensorboard loguru einops natsort h5py tabulate
 ```
 If prefer difference pytorch or cuda version, please follow this [link](https://mmcv.readthedocs.io/en/latest/get_started/installation.html) in customizing the mmcv.
 
@@ -112,7 +109,20 @@ python WildCamera/benchmark/benchmark_crop.py
 python WildCamera/benchmark/benchmark_uncalibtwoview_megadepth.py
 python WildCamera/benchmark/benchmark_uncalibtwoview_scannet.py
 ```
+## Reproduce Results
+``` bash
+# GSV Experiment
+CUDA_VISIBLE_DEVICES=0,1 python WildCamera/train/train_calibrator.py \
+--experiment_name calbr_gsv \
+--experiment_set gsv
 
+# In-the-Wild Experiment
+CUDA_VISIBLE_DEVICES=0,1 python WildCamera/train/train_calibrator.py \
+--experiment_name calbr_in_the_wild \
+--experiment_set in_the_wild \
+--dataset_favour_long 0.1 \
+--steps_per_epoch 2500
+```
 
 ## Citation <a name="citing"></a>
 

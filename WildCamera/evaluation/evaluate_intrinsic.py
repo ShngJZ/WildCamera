@@ -43,7 +43,8 @@ class EvaluateIntrinsic:
                 shuffleseed=None,
                 split='test',
                 augscale=args.augscale,
-                no_change_prob=0.0
+                no_change_prob=0.0,
+                transformcategory='transform_calibration'
             )
             measurements = evaluate_intrinsic(model, val_dataset, args, group, wtassumption=wtassumption)
             measurements_all[dataaset] = measurements
