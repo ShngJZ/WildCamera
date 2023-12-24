@@ -35,14 +35,14 @@ class MegaDepth:
 
     def __getitem__(self, idx):
         # read intrinsics of original size
-        scene_name, stem_name = self.data_names[idx].split(' ')
+        scene_name, stem_name_color, stem_name_intrinsic = self.data_names[idx].split(' ')
         h5pypath = os.path.join(self.data_root, '{}.hdf5'.format(scene_name))
 
         with h5py.File(h5pypath, 'r') as hf:
-            K_color = np.array(hf['intrinsic']['Undistorted_SfM/{}/images/{}.txt'.format(scene_name, stem_name)])
+            K_color = np.array(hf['intrinsic'][stem_name_intrinsic])
 
             # Load positive pair data
-            rgb = self.load_im(io.BytesIO(np.array(hf['color']['Undistorted_SfM/{}/images/{}.jpg'.format(scene_name, stem_name)])))
+            rgb = self.load_im(io.BytesIO(np.array(hf['color'][stem_name_color])))
             w, h = rgb.size
             rgb = rgb.resize((self.wt, self.ht))
 
