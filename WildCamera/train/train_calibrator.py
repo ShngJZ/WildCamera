@@ -54,7 +54,7 @@ parser.add_argument('--learning_rate',             type=float, help='initial lea
 parser.add_argument('--end_learning_rate',         type=float, help='end learning rate', default=-1)
 
 # Augmentation
-parser.add_argument('--dataset_favour_long',       type=float, default=0.0, help='whether in training will see more samples from large dataset')
+parser.add_argument('--dataset_favour_long',       type=float, default=0.1, help='whether in training will see more samples from large dataset')
 parser.add_argument('--augscale',                  type=float, default=2.0, help='The scale of Augmentation')
 parser.add_argument('--no_change_prob',            type=float, default=0.1, help='The probability of seeing original image')
 parser.add_argument('--coloraugmentation',         action="store_true")

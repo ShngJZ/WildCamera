@@ -38,7 +38,7 @@ Authors: [Shengjie Zhu](https://shngjz.github.io/), [Abhinav Kumar](https://site
 
 ## Brief Introduction
 <img src="asset/framework.png" width="1000" >
-We calibrate 4 DoF intrinsic parameters for in-the-wild images.
+We calibrate 4 DoF intrinsic for in-the-wild images.
 The work systematically presents the connection between intrinsic and monocular 3D priors, e.g. intrinsic is inferrable from monocular depth and surface normals.
 We additionally introduce an alternative monocular 3D prior, the incidence field, for calibration.
 
@@ -111,17 +111,16 @@ python WildCamera/benchmark/benchmark_uncalibtwoview_scannet.py
 ```
 ## Reproduce Results
 ``` bash
-# GSV Experiment
-CUDA_VISIBLE_DEVICES=0,1 python WildCamera/train/train_calibrator.py \
---experiment_name calbr_gsv \
---experiment_set gsv
-
 # In-the-Wild Experiment
 CUDA_VISIBLE_DEVICES=0,1 python WildCamera/train/train_calibrator.py \
 --experiment_name calbr_in_the_wild \
 --experiment_set in_the_wild \
---dataset_favour_long 0.1 \
 --steps_per_epoch 2500
+
+# GSV Experiment
+CUDA_VISIBLE_DEVICES=0,1 python WildCamera/train/train_calibrator.py \
+--experiment_name calbr_gsv \
+--experiment_set gsv
 ```
 
 ## Citation <a name="citing"></a>
