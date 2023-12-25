@@ -1,4 +1,5 @@
 dependencies = ['torch']
+import torch
 from WildCamera.newcrfs.newcrf_incidencefield import NEWCRFIF
 
 def WildCamera(pretrained=True):
@@ -10,5 +11,4 @@ def WildCamera(pretrained=True):
     return model
 
 if __name__ == "__main__":
-    import torch
     model_zoe_n = torch.hub.load('ShngJZ/WildCamera', "WildCamera", pretrained=True)
