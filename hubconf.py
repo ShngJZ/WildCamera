@@ -11,4 +11,4 @@ def WildCamera(pretrained=True):
     return model
 
 if __name__ == "__main__":
-    model_zoe_n = torch.hub.load('ShngJZ/WildCamera', "WildCamera", pretrained=True)
+    model = torch.hub.load('ShngJZ/WildCamera', "WildCamera", pretrained=True)

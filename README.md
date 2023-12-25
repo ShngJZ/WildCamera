@@ -82,6 +82,8 @@ pip install timm tensorboard loguru einops natsort h5py tabulate
 ```
 You can choose difference pytorch and cuda version, however, need to follow this [link](https://mmcv.readthedocs.io/en/latest/get_started/installation.html) in selecting corresponded the mmcv version.
 
+
+
 ## Demo
 ``` bash
 # Download demo images
@@ -92,6 +94,19 @@ python demo/demo_inference.py
 
 # Demo inference on dolly zoom videos
 python demo/demo_dollyzoom.py
+```
+
+## Usage
+1. Use torch.hub to load the model (in-the-wild experiment checkpoint):
+``` bash
+model = torch.hub.load('ShngJZ/WildCamera', "WildCamera", pretrained=True)
+```
+2. Calibrate intrinsic.
+``` bash
+# 4 DoF intrinsic
+model.inference(rgb, wtassumption=False)
+# 1 DoF intrinsic
+model.inference(rgb, wtassumption=True)
 ```
 
 ## Benchmark
