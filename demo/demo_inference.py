@@ -1,13 +1,9 @@
-from __future__ import print_function, division
-import warnings, os
-warnings.filterwarnings('ignore')
+import os, torch
+project_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
+from PIL import Image
 from WildCamera.newcrfs.newcrf_incidencefield import NEWCRFIF
 
-import torch
-from PIL import Image
-
-project_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 if __name__ == '__main__':
     # NeWCRFs model

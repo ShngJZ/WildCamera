@@ -171,6 +171,11 @@ class NEWCRFIF(nn.Module):
         Kest = torch.inverse(scaleM) @ Kest
         return Kest.detach().squeeze().cpu().numpy(), incidence
 
+    @torch.no_grad()
+    def restore_image(self, rgb, intrinsic, fixcrop=True):
+        monocalibrator = MonocularCalibrator()
+        return monocalibrator.restore_image(rgb, intrinsic, fixcrop)
+
 class IncidenceHead(nn.Module):
     def __init__(self, input_dim=100, output_dim=3):
         super(IncidenceHead, self).__init__()

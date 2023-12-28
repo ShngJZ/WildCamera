@@ -74,13 +74,13 @@ ln -s your-data-location data
 
 ## Installation
 ```bash
-conda create -n wildacamera python=3.8
+conda create -n wildacamera
 conda activate wildacamera
 conda install pytorch==1.13.0 torchvision==0.14.0 torchaudio==0.13.0 pytorch-cuda=11.6 -c pytorch -c nvidia
 pip install mmcv==2.0.0 -f https://download.openmmlab.com/mmcv/dist/cu116/torch1.13/index.html
 pip install timm tensorboard loguru einops natsort h5py tabulate
 ```
-You can choose difference pytorch and cuda version, however, need to follow this [link](https://mmcv.readthedocs.io/en/latest/get_started/installation.html) in selecting corresponded the mmcv version.
+You can choose difference pytorch and cuda version, however, need to follow this [link](https://mmcv.readthedocs.io/en/latest/get_started/installation.html) in selecting corresponded mmcv version.
 
 
 
@@ -94,6 +94,9 @@ python demo/demo_inference.py
 
 # Demo inference on dolly zoom videos
 python demo/demo_dollyzoom.py
+
+# Demo image restoration
+python demo/demo_restoration.py
 ```
 
 ## Usage
@@ -101,12 +104,18 @@ python demo/demo_dollyzoom.py
 ``` bash
 model = torch.hub.load('ShngJZ/WildCamera', "WildCamera", pretrained=True)
 ```
-2. Calibrate intrinsic.
+2. Calibrate intrinsic and restore image (if needed):
 ``` bash
+import PIL.Image as Image
+rgb = Image.open(path-to-image)
+
 # 4 DoF intrinsic
-model.inference(rgb, wtassumption=False)
+intrinsic, _ = model.inference(rgb, wtassumption=False)
 # 1 DoF intrinsic
-model.inference(rgb, wtassumption=True)
+intrinsic, _ = model.inference(rgb, wtassumption=True)
+
+# If need to restore image
+rgb_restored = model.restore_image(rgb, intrinsic, fixcrop=True)
 ```
 
 ## Benchmark

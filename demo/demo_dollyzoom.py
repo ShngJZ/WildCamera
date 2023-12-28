@@ -1,15 +1,9 @@
-from __future__ import print_function, division
-import os, copy, tqdm, glob, natsort
-import warnings
-warnings.filterwarnings('ignore')
+import os, copy, tqdm, glob, natsort, torch
+import numpy as np
+project_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 from WildCamera.newcrfs.newcrf_incidencefield import NEWCRFIF
-
-import torch
-import numpy as np
 from PIL import Image, ImageDraw, ImageFont
-
-project_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
 def draw_focalbar(rgbaug, fest, minfocal, maxfocal):
     tmp = copy.deepcopy(rgbaug)
